@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 import com.google.gson.reflect.TypeToken;
 
-import kael.exeptions.NoSuchCharacterExeption;
-import kael.jea.GsonSingleton;
-import kael.jea.ReadOnlyArrayList;
+import kael.jea.exeptions.NoSuchCharacterExeption;
+import kael.jea.gson.GsonSingleton;
 import kael.jea.interfaces.Updatable;
+import kael.jea.utils.ReadOnlyArrayList;
 
 /**
  * This class provides ability to review specified characters shipload.

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.google.gson.annotations.SerializedName;
 
-import kael.jea.JEATimeStamp;
+import kael.jea.utils.JEATimeStamp;
 
 /**
  * {@link ResoursesUpdateTimer} class data object model.

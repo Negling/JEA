@@ -7,10 +7,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import kael.jea.GsonSingleton;
-import kael.jea.ReadOnlyArrayList;
+import kael.jea.gson.GsonSingleton;
 import kael.jea.interfaces.Timed;
 import kael.jea.interfaces.Updatable;
+import kael.jea.utils.ReadOnlyArrayList;
 
 /**
  * This class represents global information about trade opportunities between

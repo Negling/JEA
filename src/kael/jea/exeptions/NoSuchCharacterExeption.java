@@ -1,4 +1,4 @@
-package kael.exeptions;
+package kael.jea.exeptions;
 
 /**
  * This is a subclass of checked exception {@link Exception} , which throws if

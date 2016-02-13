@@ -3,9 +3,9 @@ package kael.jea.sea.islands;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import kael.jea.ReadOnlyArrayList;
 import kael.jea.interfaces.Timed;
-import kael.jea.sea.islands.IslandDOM.Sector;
+import kael.jea.interfaces.Updatable;
+import kael.jea.utils.ReadOnlyArrayList;
 
 /**
  * This is abstract interface, which able to work with geologist islands API
@@ -15,7 +15,7 @@ import kael.jea.sea.islands.IslandDOM.Sector;
  * @since JEA1.0
  * @see {@link TurquoiseIsland} , {@link MalachiteIsland}
  */
-public abstract class Island implements Timed {
+public abstract class Island implements Updatable, Timed {
 	/**
 	 * Creates abstract Island class.
 	 * 
@@ -48,11 +48,9 @@ public abstract class Island implements Timed {
 	 */
 	public ReadOnlyArrayList<String> getSectorsClanOwn(int clanId) {
 		ArrayList<String> sectors = new ArrayList<>();
-		for (Sector sector : data.getSectors()) {
-			for (int iD : sector.getClanOwners()) {
-				if (iD == clanId) {
-					sectors.add(sector.getLocation());
-				}
+		for (String location : data.getSectors().keySet()) {
+			if (isClanAviliableToMine(clanId, location)) {
+				sectors.add(location);
 			}
 		}
 		if (sectors.isEmpty()) {
@@ -73,11 +71,9 @@ public abstract class Island implements Timed {
 	 */
 	public ReadOnlyArrayList<String> getSectorsCharacterOwn(int characterId) {
 		ArrayList<String> sectors = new ArrayList<>();
-		for (Sector sector : data.getSectors()) {
-			for (int iD : sector.getHeroOwners()) {
-				if (iD == characterId) {
-					sectors.add(sector.getLocation());
-				}
+		for (String location : data.getSectors().keySet()) {
+			if (isCharacterAviliableToMine(characterId, location)) {
+				sectors.add(location);
 			}
 		}
 		if (sectors.isEmpty()) {
@@ -96,12 +92,7 @@ public abstract class Island implements Timed {
 	 * @return int[] array
 	 */
 	public int[] getSectorClanOwnersId(String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				return sector.getClanOwners();
-			}
-		}
-		return null;
+		return data.getSectors().get(location).getClanOwners();
 	}
 
 	/**
@@ -113,12 +104,7 @@ public abstract class Island implements Timed {
 	 * @return int[] array
 	 */
 	public int[] getSectorCharacterOwnersId(String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				return sector.getHeroOwners();
-			}
-		}
-		return null;
+		return data.getSectors().get(location).getHeroOwners();
 	}
 
 	/**
@@ -130,37 +116,18 @@ public abstract class Island implements Timed {
 	 * @return boolean value
 	 */
 	public boolean containsOre(String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				if (sector.getResourceCount() > 0) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
-		return false;
+		return getSectorAviliableOre(location) > 0;
 	}
 
 	/**
-	 * Returns true if explored sector no contains ore, or ore value is 0.
-	 * Otherwise returns false.
+	 * Returns true if explored sector contains no ore. Otherwise returns false.
 	 * 
 	 * @param location
 	 *            - location id in string representation
 	 * @return boolean value
 	 */
 	public boolean emptySector(String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				if (sector.getResourceId() == 0) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
-		return false;
+		return getSectorResourceId(location) <= 0;
 	}
 
 	/**
@@ -174,14 +141,11 @@ public abstract class Island implements Timed {
 	 * @return boolean value
 	 */
 	public boolean isClanAviliableToMine(int clanId, String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				for (int iD : sector.getClanOwners()) {
-					if (iD == clanId) {
-						return true;
-					}
+		if (getSectorResourceId(location) > 0) {
+			for (int iD : getSectorClanOwnersId(location)) {
+				if (iD == clanId) {
+					return true;
 				}
-				break;
 			}
 		}
 		return false;
@@ -198,49 +162,14 @@ public abstract class Island implements Timed {
 	 * @return boolean value
 	 */
 	public boolean isCharacterAviliableToMine(int characterId, String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				for (int iD : sector.getHeroOwners()) {
-					if (iD == characterId) {
-						return true;
-					}
+		if (getSectorResourceId(location) > 0) {
+			for (int iD : getSectorCharacterOwnersId(location)) {
+				if (iD == characterId) {
+					return true;
 				}
-				break;
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Returns sector sign id as integer. If sector not found returns -1.
-	 * 
-	 * @param location
-	 *            - location id in string representation
-	 * @return integer value
-	 */
-	public int getSectorSignId(String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				return sector.getObjectId();
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * Returns sector available ore. If sector not found returns -1.
-	 * 
-	 * @param location
-	 *            - location id in string representation
-	 * @return integer value
-	 */
-	public int getSectorAviliableOre(String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				return sector.getResourceCount();
-			}
-		}
-		return -1;
 	}
 
 	/**
@@ -252,16 +181,9 @@ public abstract class Island implements Timed {
 	 */
 	public int getCharacterAviliableOre(int characterId) {
 		int aviliableOre = 0;
-		boolean isOwner;
-		for (Sector sector : data.getSectors()) {
-			isOwner = false;
-			for (int iD : sector.getHeroOwners()) {
-				if (iD == characterId) {
-					isOwner = true;
-				}
-			}
-			if (isOwner) {
-				aviliableOre += sector.getResourceCount();
+		for (String location : data.getSectors().keySet()) {
+			if (isCharacterAviliableToMine(characterId, location)) {
+				aviliableOre += data.getSectors().get(location).getResourceCount();
 			}
 		}
 		return aviliableOre;
@@ -276,19 +198,40 @@ public abstract class Island implements Timed {
 	 */
 	public int getClanAviliableOre(int clanId) {
 		int aviliableOre = 0;
-		boolean isOwner;
-		for (Sector sector : data.getSectors()) {
-			isOwner = false;
-			for (int iD : sector.getClanOwners()) {
-				if (iD == clanId) {
-					isOwner = true;
-				}
-			}
-			if (isOwner) {
-				aviliableOre += sector.getResourceCount();
+		for (String location : data.getSectors().keySet()) {
+			if (isClanAviliableToMine(clanId, location)) {
+				aviliableOre += data.getSectors().get(location).getResourceCount();
 			}
 		}
 		return aviliableOre;
+	}
+
+	/**
+	 * Returns sector sign id as integer. If sector not found returns -1.
+	 * 
+	 * @param location
+	 *            - location id in string representation
+	 * @return integer value
+	 */
+	public int getSectorSignId(String location) {
+		if (data.getSectors().get(location) != null) {
+			return data.getSectors().get(location).getObjectId();
+		}
+		return -1;
+	}
+
+	/**
+	 * Returns sector available ore. If sector not found, or empty - returns -1.
+	 * 
+	 * @param location
+	 *            - location id in string representation
+	 * @return integer value
+	 */
+	public int getSectorAviliableOre(String location) {
+		if (getSectorResourceId(location) > 0) {
+			return data.getSectors().get(location).getResourceCount();
+		}
+		return -1;
 	}
 
 	/**
@@ -299,10 +242,8 @@ public abstract class Island implements Timed {
 	 * @return integer value
 	 */
 	public int getSectorResourceId(String location) {
-		for (Sector sector : data.getSectors()) {
-			if (sector.getLocation().equals(location)) {
-				return sector.getResourceId();
-			}
+		if (data.getSectors().get(location) != null) {
+			return data.getSectors().get(location).getResourceId();
 		}
 		return -1;
 	}

@@ -1,15 +1,13 @@
 package kael.jea.sea.islands;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.GregorianCalendar;
 
-import kael.jea.GsonSingleton;
-import kael.jea.JEATimeStamp;
+import kael.jea.gson.GsonSingleton;
 import kael.jea.interfaces.Timed;
 import kael.jea.interfaces.Updatable;
+import kael.jea.utils.DataLoader;
+import kael.jea.utils.JEATimeStamp;
 
 /**
  * This class provides ability to work with geologist islands update timers.
@@ -18,7 +16,10 @@ import kael.jea.interfaces.Updatable;
  * @since JEA1.0
  */
 public class ResoursesUpdateTimer implements Updatable, Timed {
-
+	/**
+	 * Timer URL location, represented as string.
+	 */
+	private final static String TIMER_URL = "http://api.ereality.ru/geologist_map_update.txt";
 	private ResoursesUpdateTimerDOM data;
 
 	/**
@@ -39,20 +40,13 @@ public class ResoursesUpdateTimer implements Updatable, Timed {
 	 *             if game API is unavailable.
 	 */
 	public static ResoursesUpdateTimer initialize() throws IOException {
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(new URL("http://api.ereality.ru/geologist_map_update.txt").openStream()))) {
-			return new ResoursesUpdateTimer(
-					GsonSingleton.getInstance().fromJson(in.readLine(), ResoursesUpdateTimerDOM.class));
-		}
+		return new ResoursesUpdateTimer(
+				GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(TIMER_URL), ResoursesUpdateTimerDOM.class));
 	}
 
 	@Override
 	public void updateData() throws IOException {
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(new URL("http://api.ereality.ru/geologist_map_update.txt").openStream()))) {
-			data = GsonSingleton.getInstance().fromJson(in.readLine(), ResoursesUpdateTimerDOM.class);
-		}
-
+		data = GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(TIMER_URL), ResoursesUpdateTimerDOM.class);
 	}
 
 	@Override

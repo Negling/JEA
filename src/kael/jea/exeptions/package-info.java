@@ -6,4 +6,4 @@
  * @author Kael
  *
  */
-package kael.exeptions;
+package kael.jea.exeptions;

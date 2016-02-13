@@ -1,10 +1,11 @@
 package kael.jea.sea.islands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gson.annotations.SerializedName;
 
-import kael.jea.JEATimeStamp;
+import kael.jea.utils.JEATimeStamp;
 
 /**
  * {@link Island} class data object model.
@@ -13,9 +14,9 @@ import kael.jea.JEATimeStamp;
  * @since JEA1.0
  * @see Island
  */
-class IslandDOM {
+public class IslandDOM {
 	@SerializedName("map")
-	private ArrayList<Sector> sectors;
+	private HashMap<String, Sector> sectors;
 	@SerializedName("info")
 	private JEATimeStamp createdAt;
 
@@ -24,7 +25,7 @@ class IslandDOM {
 	 * 
 	 * @return {@link ArrayList} list
 	 */
-	public ArrayList<Sector> getSectors() {
+	public HashMap<String, Sector> getSectors() {
 		return sectors;
 	}
 
@@ -44,7 +45,7 @@ class IslandDOM {
 	 * @author Kael
 	 * @since JEA1.0
 	 */
-	class Sector {
+	public class Sector {
 		private int objectId;
 		private int resourceId;
 		private int resourceCount;

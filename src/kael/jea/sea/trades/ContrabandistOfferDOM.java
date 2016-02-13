@@ -2,7 +2,7 @@ package kael.jea.sea.trades;
 
 import com.google.gson.annotations.SerializedName;
 
-import kael.jea.JEATimeStamp;
+import kael.jea.utils.JEATimeStamp;
 
 /**
  * {@link ContrabandistOffer} data object model.

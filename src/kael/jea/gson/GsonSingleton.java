@@ -1,6 +1,10 @@
-package kael.jea;
+package kael.jea.gson;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import kael.jea.gson.deserializers.IslandDOMDesializer;
+import kael.jea.sea.islands.IslandDOM;
 
 /**
  * Class - container for static synchronized instance of {@link Gson}
@@ -15,7 +19,8 @@ public class GsonSingleton {
 
 	/**
 	 * 
-	 * @return {@link Gson} simple instance. Thread safe.
+	 * @return {@link Gson} simple instance with all registered deserializers,
+	 *         that are important to sea classes correct work. Thread safe.
 	 */
 	public static Gson getInstance() {
 		Gson localInstance = instance;
@@ -23,7 +28,8 @@ public class GsonSingleton {
 			synchronized (Gson.class) {
 				localInstance = instance;
 				if (localInstance == null) {
-					instance = localInstance = new Gson();
+					instance = localInstance = new GsonBuilder()
+							.registerTypeAdapter(IslandDOM.class, new IslandDOMDesializer()).create();
 				}
 			}
 		}

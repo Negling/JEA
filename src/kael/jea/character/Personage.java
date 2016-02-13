@@ -1,15 +1,12 @@
 package kael.jea.character;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.net.URLEncoder;
-
 import de.ailis.pherialize.MixedArray;
 import de.ailis.pherialize.Pherialize;
-import kael.exeptions.NoSuchCharacterExeption;
+import kael.jea.exeptions.NoSuchCharacterExeption;
 import kael.jea.interfaces.Updatable;
+import kael.jea.utils.DataLoader;
 
 /**
  * This class provides access and information about specified ereality.ru game
@@ -30,15 +27,13 @@ public class Personage implements Updatable {
 	 * @param accessKey
 	 *            - clan API key to access game API.
 	 */
-	private Personage(MixedArray data, String nickname, String accessKey) {
+	private Personage(MixedArray data, String url) {
 		this.data = data;
-		this.nickname = nickname;
-		this.accessKey = accessKey;
+		this.CHARACTER_DATA_URL = url;
 	}
 
+	private final String CHARACTER_DATA_URL;
 	private MixedArray data;
-	private String nickname;
-	private String accessKey;
 	private MainInfo info;
 	private Inventory inventory;
 	private Ratings ratings;
@@ -60,36 +55,28 @@ public class Personage implements Updatable {
 	 */
 	public static Personage initialize(String nickname, String accessKey) throws IOException, NoSuchCharacterExeption {
 		MixedArray data;
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(new URL(
-				"http://api.ereality.ru/" + accessKey + "/pinfo/?h_name=" + URLEncoder.encode(nickname, "Cp1251"))
-						.openStream(),
-				"Cp1251"))) {
-			data = Pherialize.unserialize(in.readLine()).toArray();
-		}
+		String charUrl = "http://api.ereality.ru/" + accessKey + "/pinfo/?h_name="
+				+ URLEncoder.encode(nickname, "Cp1251");
+		data = Pherialize.unserialize(DataLoader.getAPIData(charUrl)).toArray();
 		if (data.isEmpty()) {
 			throw new NoSuchCharacterExeption("Character \"" + nickname + "\" not found!");
 		}
-		return new Personage(data, nickname, accessKey);
+		return new Personage(data, charUrl);
 	}
 
 	public void updateData() throws IOException {
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(new URL(
-				"http://api.ereality.ru/" + accessKey + "/pinfo/?h_name=" + URLEncoder.encode(nickname, "Cp1251"))
-						.openStream(),
-				"Cp1251"))) {
-			data = Pherialize.unserialize(in.readLine()).toArray();
-			if (info != null) {
-				info.refresh(data);
-			}
-			if (ratings != null) {
-				ratings.refresh(data);
-			}
-			if (inventory != null) {
-				inventory.refresh(data);
-			}
-			if (achievements != null) {
-				achievements.refresh(data);
-			}
+		data = Pherialize.unserialize(DataLoader.getAPIData(CHARACTER_DATA_URL)).toArray();
+		if (info != null) {
+			info.refresh(data);
+		}
+		if (ratings != null) {
+			ratings.refresh(data);
+		}
+		if (inventory != null) {
+			inventory.refresh(data);
+		}
+		if (achievements != null) {
+			achievements.refresh(data);
 		}
 	}
 

@@ -1,12 +1,9 @@
 package kael.jea.sea.islands;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 
-import kael.jea.GsonSingleton;
-import kael.jea.interfaces.Updatable;
+import kael.jea.gson.GsonSingleton;
+import kael.jea.utils.DataLoader;
 
 /**
  * Concrete realization of Island class, which provides opportunity to work with
@@ -16,11 +13,17 @@ import kael.jea.interfaces.Updatable;
  * @since JEA1.0
  * @see TurquoiseIsland
  */
-public class MalachiteIsland extends Island implements Updatable {
+public class MalachiteIsland extends Island {
+	/**
+	 * Current island URL location, represented as string.
+	 */
+	private final static String ISLAND_URL = "http://api.ereality.ru/geologist_map28.txt";
+
 	/**
 	 * The only way to get an instance of class - static method initialize.
 	 * 
-	 * @param IslandDOM data object model.
+	 * @param IslandDOM
+	 *            data object model.
 	 */
 	private MalachiteIsland(IslandDOM data) {
 		super(data);
@@ -35,17 +38,12 @@ public class MalachiteIsland extends Island implements Updatable {
 	 * @see TurquoiseIsland
 	 */
 	public static MalachiteIsland initialize() throws IOException {
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(new URL("http://api.ereality.ru/geologist_map28.txt").openStream()))) {
-			return new MalachiteIsland(GsonSingleton.getInstance().fromJson(in.readLine(), IslandDOM.class));
-		}
+		return new MalachiteIsland(
+				GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(ISLAND_URL), IslandDOM.class));
 	}
 
 	@Override
 	public void updateData() throws IOException {
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(new URL("http://api.ereality.ru/geologist_map28.txt").openStream()))) {
-			setData(GsonSingleton.getInstance().fromJson(in.readLine(), IslandDOM.class));
-		}
+		setData(GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(ISLAND_URL), IslandDOM.class));
 	}
 }

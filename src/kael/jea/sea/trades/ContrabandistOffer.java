@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.GregorianCalendar;
 
-import kael.jea.GsonSingleton;
+import kael.jea.gson.GsonSingleton;
 import kael.jea.interfaces.Timed;
 import kael.jea.interfaces.Updatable;
 

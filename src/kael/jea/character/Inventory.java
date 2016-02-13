@@ -3,7 +3,7 @@ package kael.jea.character;
 import java.util.ArrayList;
 
 import de.ailis.pherialize.MixedArray;
-import kael.jea.ReadOnlyArrayList;
+import kael.jea.utils.ReadOnlyArrayList;
 
 /**
  * This is a {@link Personage} utility class, used to store and represent

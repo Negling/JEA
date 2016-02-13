@@ -8,7 +8,7 @@ package kael.jea.sea.trades;
  * @since JEA1.0
  * @see BuyOffer
  */
-public class SellOffer {
+public class SellOffer extends GlobalSellOffer {
 	/**
 	 * Creates simple instance of SellOffer class.
 	 * 
@@ -22,47 +22,14 @@ public class SellOffer {
 	 *            - amount of product
 	 */
 	protected SellOffer(int islandId, int goodsId, double sellPrice, int amount) {
-		this.islandId = islandId;
-		this.goodsId = goodsId;
-		this.sellPrice = sellPrice;
+		super(islandId, goodsId, sellPrice);
 		this.amount = amount;
 	}
 
-	private int islandId;
-	private int goodsId;
-	private double sellPrice;
 	private int amount;
 
 	/**
-	 * Returns id of island that provides this offer.
-	 * 
-	 * @return integer value
-	 */
-	public int getIslandId() {
-		return islandId;
-	}
-
-	/**
-	 * Returns goods id.
-	 * 
-	 * @return integer value
-	 */
-	public int getGoodsId() {
-		return goodsId;
-	}
-
-	/**
-	 * Returns sell price.
-	 * 
-	 * @return double value
-	 */
-	public double getSellPrice() {
-		return sellPrice;
-	}
-
-	/**
 	 * Returns an amount of product island able sell to current character.
-	 * Returns -1 if this is an global sell offer.
 	 * 
 	 * @return integer value
 	 */

@@ -9,7 +9,7 @@ import java.net.URL;
  * This is an simple class, created to get data from ereality.ru API.
  * 
  * @author Kael
- * @since JEA1.1
+ * @since JEA1.0
  */
 public class DataLoader {
 	/**

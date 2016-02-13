@@ -1,18 +1,15 @@
 package kael.jea.sea.trades;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gson.reflect.TypeToken;
 
-import kael.jea.exeptions.NoSuchCharacterExeption;
-import kael.jea.gson.GsonSingleton;
 import kael.jea.interfaces.Updatable;
+import kael.jea.utils.DataLoader;
+import kael.jea.utils.GsonSingleton;
 import kael.jea.utils.ReadOnlyArrayList;
 
 /**
@@ -34,17 +31,14 @@ public class Shipload implements Updatable {
 	 * @param accessKey
 	 *            - clan API key to access game API.
 	 */
-	private Shipload(String accessKey, int characterId, HashMap<String, String> goodsMap) {
-		this.accessKey = accessKey;
-		this.characterId = characterId;
+	private Shipload(String url, HashMap<String, String> goodsMap) {
+		this.DATA_URL = url;
 		this.data = goodsMap;
 		this.goods = setGoods();
 	}
-
-	final private static Type COLLECTION_TYPE = new TypeToken<HashMap<String, String>>() {
+	private final static Type COLLECTION_TYPE = new TypeToken<HashMap<String, String>>() {
 	}.getType();
-	final private String accessKey;
-	final private int characterId;
+	private final String DATA_URL;
 	private HashMap<String, String> data;
 	private ReadOnlyArrayList<GoodsContainer> goods;
 
@@ -62,34 +56,27 @@ public class Shipload implements Updatable {
 	 * @throws NoSuchCharacterExeption
 	 *             - if character not exist.
 	 */
-	public static Shipload initialize(String accessKey, int characterId) throws IOException, NoSuchCharacterExeption {
+	public static Shipload initialize(String accessKey, int characterId) throws IOException {
 		HashMap<String, String> goodsMap;
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(
-				new URL("http://api.ereality.ru/" + accessKey + "/shipload/?h_id=" + characterId).openStream()))) {
-			String result = in.readLine();
-			if (result == null) {
-				throw new NoSuchCharacterExeption("Character with id \"" + characterId + "\" not found!");
-			} else if (result.equals("false")) {
-				goodsMap = new HashMap<>();
-			} else {
-				goodsMap = GsonSingleton.getInstance().fromJson(result, COLLECTION_TYPE);
-			}
+		String url = "http://api.ereality.ru/" + accessKey + "/shipload/?h_id=" + characterId;
+		String result = DataLoader.getAPIData(url);
+		if (result == null || result.equals("false")) {
+			goodsMap = new HashMap<>();
+		} else {
+			goodsMap = GsonSingleton.getInstance().fromJson(result, COLLECTION_TYPE);
 		}
-		return new Shipload(accessKey, characterId, goodsMap);
+		return new Shipload(url, goodsMap);
 	}
 
 	@Override
 	public void updateData() throws IOException {
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(
-				new URL("http://api.ereality.ru/" + accessKey + "/shipload/?h_id=" + characterId).openStream()))) {
-			String result = in.readLine();
-			if (result.equals("false")) {
-				data = new HashMap<>();
-				goods = new ReadOnlyArrayList<>();
-			} else {
-				data = GsonSingleton.getInstance().fromJson(result, COLLECTION_TYPE);
-				goods = setGoods();
-			}
+		String result = DataLoader.getAPIData(DATA_URL);
+		if (result == null || result.equals("false")) {
+			data = new HashMap<>();
+			goods = new ReadOnlyArrayList<>();
+		} else {
+			data = GsonSingleton.getInstance().fromJson(result, COLLECTION_TYPE);
+			goods = setGoods();
 		}
 	}
 

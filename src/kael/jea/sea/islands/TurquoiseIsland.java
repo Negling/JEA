@@ -2,7 +2,6 @@ package kael.jea.sea.islands;
 
 import java.io.IOException;
 
-import kael.jea.gson.GsonSingleton;
 import kael.jea.utils.DataLoader;
 
 /**
@@ -39,12 +38,11 @@ public class TurquoiseIsland extends Island {
 	 * @see MalachiteIsland
 	 */
 	public static TurquoiseIsland initialize() throws IOException {
-		return new TurquoiseIsland(
-				GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(ISLAND_URL), IslandDOM.class));
+		return new TurquoiseIsland(Island.gsonInstance.fromJson(DataLoader.getAPIData(ISLAND_URL), IslandDOM.class));
 	}
 
 	@Override
 	public void updateData() throws IOException {
-		setData(GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(ISLAND_URL), IslandDOM.class));
+		setData(Island.gsonInstance.fromJson(DataLoader.getAPIData(ISLAND_URL), IslandDOM.class));
 	}
 }

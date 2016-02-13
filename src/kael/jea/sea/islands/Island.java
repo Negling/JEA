@@ -3,6 +3,9 @@ package kael.jea.sea.islands;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import kael.jea.interfaces.Timed;
 import kael.jea.interfaces.Updatable;
 import kael.jea.utils.ReadOnlyArrayList;
@@ -27,6 +30,8 @@ public abstract class Island implements Updatable, Timed {
 	}
 
 	private IslandDOM data;
+	protected static Gson gsonInstance = new GsonBuilder().registerTypeAdapter(IslandDOM.class, new IslandDOMDesializer())
+			.create();
 
 	/**
 	 * Sets new DOM to island.

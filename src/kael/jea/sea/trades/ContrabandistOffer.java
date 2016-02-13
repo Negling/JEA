@@ -1,14 +1,12 @@
 package kael.jea.sea.trades;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.GregorianCalendar;
 
-import kael.jea.gson.GsonSingleton;
 import kael.jea.interfaces.Timed;
 import kael.jea.interfaces.Updatable;
+import kael.jea.utils.DataLoader;
+import kael.jea.utils.GsonSingleton;
 
 /**
  * This class represents information about contrabandist offer.
@@ -17,6 +15,7 @@ import kael.jea.interfaces.Updatable;
  * @since JEA1.0
  */
 public class ContrabandistOffer implements Updatable, Timed {
+	private static final String DATA_URL = "http://api.ereality.ru/contrabandist.txt";
 	private ContrabandistOfferDOM data;
 
 	/**
@@ -37,19 +36,13 @@ public class ContrabandistOffer implements Updatable, Timed {
 	 *             if game API is unavailable.
 	 */
 	public static ContrabandistOffer initialize() throws IOException {
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(new URL("http://api.ereality.ru/contrabandist.txt").openStream()))) {
-			return new ContrabandistOffer(
-					GsonSingleton.getInstance().fromJson(in.readLine(), ContrabandistOfferDOM.class));
-		}
+		return new ContrabandistOffer(
+				GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(DATA_URL), ContrabandistOfferDOM.class));
 	}
 
 	@Override
 	public void updateData() throws IOException {
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(new URL("http://api.ereality.ru/contrabandist.txt").openStream()))) {
-			data = GsonSingleton.getInstance().fromJson(in.readLine(), ContrabandistOfferDOM.class);
-		}
+		data = GsonSingleton.getInstance().fromJson(DataLoader.getAPIData(DATA_URL), ContrabandistOfferDOM.class);
 	}
 
 	/**

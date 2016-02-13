@@ -3,10 +3,10 @@ package kael.jea.sea.islands;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 
-import kael.jea.gson.GsonSingleton;
 import kael.jea.interfaces.Timed;
 import kael.jea.interfaces.Updatable;
 import kael.jea.utils.DataLoader;
+import kael.jea.utils.GsonSingleton;
 import kael.jea.utils.JEATimeStamp;
 
 /**

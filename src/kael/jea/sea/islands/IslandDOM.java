@@ -14,7 +14,13 @@ import kael.jea.utils.JEATimeStamp;
  * @since JEA1.0
  * @see Island
  */
-public class IslandDOM {
+class IslandDOM {
+	
+	protected IslandDOM(HashMap<String, Sector> sectors, JEATimeStamp createdAt) {
+		this.sectors = sectors;
+		this.createdAt = createdAt;
+	}
+
 	@SerializedName("map")
 	private HashMap<String, Sector> sectors;
 	@SerializedName("info")

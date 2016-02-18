@@ -10,7 +10,7 @@ JEA - is a small library, which alows you to recive information from ereality.ru
 
 At the moment library provides access to next API's:
 * Character data;
-* Islands exloring status and update timer status
+* Islands exploring status and update timer status
 * Islands trade offers and shipload status
 
 <b>USAGE:</b>

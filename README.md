@@ -15,7 +15,7 @@ At the moment library provides access to next API's:
 
 <b>USAGE:</b>
 
-Simply call static method `initialize()` in interested data class, use public method's to recieve data. method `uddateData()` updates data respectivly.
+Simply call static method `initialize()` in interested data class, use public method's to recieve data. Method `updateData()` updates data respectivly.
 
 <b>EXAMPLES:</b>
 ```Java

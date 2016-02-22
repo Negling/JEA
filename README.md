@@ -1,7 +1,7 @@
 # JEA
 <b>DESCRIPTION:</b>
 
-JEA - is a small library, which alows you to recive information from ereality.ru API's in convenient Java format. 
+JEA - is a small library, which allows you to recieve information from ereality.ru API's in convenient Java format. 
 
 *Used libraries:*
 

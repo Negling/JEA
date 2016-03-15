@@ -26,4 +26,20 @@ public class DataLoader {
 			return in.readLine();
 		}
 	}
+	
+	/**
+	 * Returns an string representation of data from current URL.
+	 * 
+	 * @param url
+	 *            from get data.
+	 * @param encoding - specified encoding parameters
+	 * @return string representation of received data.
+	 * @throws IOException
+	 *             if URL is incorrect, or no connection/access to game API.
+	 */
+	public static String getAPIData(String url, String encoding) throws IOException {
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(new URL(url).openStream(), encoding))) {
+			return in.readLine();
+		}
+	}
 }

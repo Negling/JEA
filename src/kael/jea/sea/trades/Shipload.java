@@ -53,7 +53,7 @@ public class Shipload implements Updatable {
 	 * @return instance of {@link Shipload} class.
 	 * @throws IOException
 	 *             if game API is unavailable, or no net connection.
-	 * @throws NoSuchCharacterExeption
+	 * @throws NoSuchCharacterException
 	 *             - if character not exist.
 	 */
 	public static Shipload initialize(String accessKey, int characterId) throws IOException {

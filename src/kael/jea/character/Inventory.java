@@ -6,12 +6,12 @@ import de.ailis.pherialize.MixedArray;
 import kael.jea.utils.ReadOnlyArrayList;
 
 /**
- * This is a {@link Personage} utility class, used to store and represent
+ * This is a {@link ErealityCharacter} utility class, used to store and represent
  * information about specified personage inventory.
  * 
  * @author Kael
  * @since JEA1.0
- * @see Personage
+ * @see ErealityCharacter
  */
 public class Inventory {
 	/**

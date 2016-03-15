@@ -1,4 +1,4 @@
-package kael.jea.exeptions;
+package kael.jea.exceptions;
 
 /**
  * This is a subclass of checked exception {@link Exception} , which throws if
@@ -9,13 +9,13 @@ package kael.jea.exeptions;
  * @see java.lang.Exception
  * @since JEA1.0
  */
-public class NoSuchCharacterExeption extends Exception {
+public class NoSuchCharacterException extends Exception {
 	private static final long serialVersionUID = 6305222900089545752L;
 
 	/**
 	 * Constructs a new exception with {@code null} as its detail message.
 	 */
-	public NoSuchCharacterExeption() {
+	public NoSuchCharacterException() {
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class NoSuchCharacterExeption extends Exception {
 	 * @param message
 	 *            - the detail message.
 	 */
-	public NoSuchCharacterExeption(String message) {
+	public NoSuchCharacterException(String message) {
 		super(message);
 	}
 }

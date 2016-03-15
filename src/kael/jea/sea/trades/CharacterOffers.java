@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import kael.jea.exeptions.NoSuchCharacterExeption;
+import kael.jea.exceptions.NoSuchCharacterException;
 import kael.jea.interfaces.Updatable;
 import kael.jea.utils.DataLoader;
 import kael.jea.utils.ReadOnlyArrayList;
@@ -51,15 +51,15 @@ public class CharacterOffers implements Updatable {
 	 * @return instance of {@link CharacterOffers} class.
 	 * @throws IOException
 	 *             - if game API is unavailable, or no net connection.
-	 * @throws NoSuchCharacterExeption
+	 * @throws NoSuchCharacterException
 	 *             - if character not exist.
 	 */
 	public static CharacterOffers initialize(String accessKey, int characterId)
-			throws IOException, NoSuchCharacterExeption {
+			throws IOException, NoSuchCharacterException {
 		String url = "http://api.ereality.ru/" + accessKey + "/cshops/?h_id=" + characterId;
 		String info = DataLoader.getAPIData(url);
 		if (info == null) {
-			throw new NoSuchCharacterExeption("Character with id \"" + characterId + "\" not found!");
+			throw new NoSuchCharacterException("Character with id \"" + characterId + "\" not found!");
 		}
 		return new CharacterOffers(gsonInstance.fromJson(info, CharacterOffersDOM.class), url);
 	}

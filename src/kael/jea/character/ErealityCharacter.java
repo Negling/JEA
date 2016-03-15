@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import de.ailis.pherialize.MixedArray;
 import de.ailis.pherialize.Pherialize;
-import kael.jea.exeptions.NoSuchCharacterExeption;
+import kael.jea.exceptions.NoSuchCharacterException;
 import kael.jea.interfaces.Updatable;
 import kael.jea.utils.DataLoader;
 
@@ -15,7 +15,7 @@ import kael.jea.utils.DataLoader;
  * @author Kael
  * @since JEA1.0
  */
-public class Personage implements Updatable {
+public class ErealityCharacter implements Updatable {
 	/**
 	 * The only way to get an instance of Personage class - static method
 	 * initialize.
@@ -27,7 +27,7 @@ public class Personage implements Updatable {
 	 * @param accessKey
 	 *            - clan API key to access game API.
 	 */
-	private Personage(MixedArray data, String url) {
+	protected ErealityCharacter(MixedArray data, String url) {
 		this.data = data;
 		this.CHARACTER_DATA_URL = url;
 	}
@@ -47,21 +47,21 @@ public class Personage implements Updatable {
 	 *            - character nickname, to look for.
 	 * @param accessKey
 	 *            - clan API key to access game API.
-	 * @return instance of {@link Personage} class.
+	 * @return instance of {@link ErealityCharacter} class.
 	 * @throws IOException
 	 *             if game API is unavailable, or no net connection.
-	 * @throws NoSuchCharacterExeption
+	 * @throws NoSuchCharacterException
 	 *             - if character not exist.
 	 */
-	public static Personage initialize(String nickname, String accessKey) throws IOException, NoSuchCharacterExeption {
+	public static ErealityCharacter initialize(String nickname, String accessKey) throws IOException, NoSuchCharacterException {
 		MixedArray data;
 		String charUrl = "http://api.ereality.ru/" + accessKey + "/pinfo/?h_name="
 				+ URLEncoder.encode(nickname, "Cp1251");
-		data = Pherialize.unserialize(DataLoader.getAPIData(charUrl)).toArray();
+		data = Pherialize.unserialize(DataLoader.getAPIData(charUrl, "Cp1251")).toArray();
 		if (data.isEmpty()) {
-			throw new NoSuchCharacterExeption("Character \"" + nickname + "\" not found!");
+			throw new NoSuchCharacterException("Character \"" + nickname + "\" not found!");
 		}
-		return new Personage(data, charUrl);
+		return new ErealityCharacter(data, charUrl);
 	}
 
 	public void updateData() throws IOException {

@@ -20,7 +20,7 @@ Simply call static method `initialize()` in interested data class, use public me
 <b>EXAMPLES:</b>
 ```Java
 ContrabandistOffer cOffer = ContrabandistOffer.initialize(); // now u have an instance of class
-cOffer.getGoodsId(); // returns an id of productm that contrabandist is currently buying
+cOffer.getGoodsId(); // returns an id of product, that contrabandist is currently buying
 cOffer.updateData(); // checks out new information from game API's
 ```
 <b>List of available data classes:</b>
